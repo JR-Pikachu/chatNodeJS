@@ -1,0 +1,24 @@
+{
+  "name": "chatnodejs",
+  "version": "1.0.0",
+  "description": "Chat with NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JR-Pikachu/chatNodeJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JR-Pikachu/chatNodeJS/issues"
+  },
+  "homepage": "https://github.com/JR-Pikachu/chatNodeJS#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1",
+    "twig": "^1.11.1"
+  }
+}
