@@ -61,10 +61,15 @@ $(function() {
       $inputMessage.val('');
       addChatMessage({
         username: username,
-        message: message
+        message: message,
+        date: new Date()
       });
       // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+      socket.emit('new message', {
+        username: username,
+        message: message,
+        date: new Date()
+      });
     }
   }
 
@@ -238,6 +243,7 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', (data) => {
+    console.log(data);
     addChatMessage(data);
   });
 

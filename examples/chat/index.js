@@ -1,12 +1,22 @@
 // Setup basic express server
 var express = require('express');
 var app = express();
+var mongoose = require('mongoose');
 var path = require('path');
 var server = require('http').createServer(app);
 var io = require('../..')(server);
 var port = process.env.PORT || 3000;
+var schema = mongoose.Schema;
 
-server.listen(port, () => {
+var msgSchema = new schema({
+  username: String,
+  message: String,
+  date: Date
+});
+
+var chats = mongoose.model("chats", msgSchema);
+
+server.listen(port, "0.0.0.0", () => {
   console.log('Server listening at port %d', port);
 });
 
@@ -18,19 +28,62 @@ app.use(express.static(path.join(__dirname, 'public')));
 var numUsers = 0;
 
 io.on('connection', (socket) => {
+  /*mongoose.connect('mongodb://127.0.0.1:27017/chat');
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'Connection error:'));
+  db.once('open', function() {
+    chats.find(function(error, result) {
+      for (var i = 0; i < result.length; i++) {
+        socket.broadcast.emit('new message', {
+          username: result[i].username,
+          message: result[i].message
+        });
+      }
+    });
+  });*/
+
   var addedUser = false;
 
   // when the client emits 'new message', this listens and executes
   socket.on('new message', (data) => {
     // we tell the client to execute 'new message'
+    console.log(data);
     socket.broadcast.emit('new message', {
       username: socket.username,
-      message: data
+      message: data.message
+    });
+    mongoose.connect('mongodb://127.0.0.1:27017/chat');
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'Connection error:'));
+    db.once('open', function() {
+      db.collection("chats").insert(data);
     });
   });
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', (username) => {
+    console.log(username);
+    io.clients((error, clients) => {
+    if (error) throw error;
+      console.log(clients[clients.length - 1]);
+      mongoose.connect('mongodb://127.0.0.1:27017/chat');
+      var db = mongoose.connection;
+      db.on('error', console.error.bind(console, 'Connection error:'));
+      db.once('open', function() {
+        chats.find(function(error, result) {
+          for (var i = 0; i < result.length; i++) {
+            socket.broadcast.to(clients[clients.length - 1]).emit('new message', {
+              username: result[i].username,
+              message: result[i].message
+            });
+            /*socket.broadcast.emit('new message', {
+              username: result[i].username,
+              message: result[i].message
+            });*/
+          }
+        });
+      });
+    });
     if (addedUser) return;
 
     // we store the username in the socket session for this client
