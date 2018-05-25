@@ -1,24 +1,59 @@
 {
-  "name": "chatnodejs",
-  "version": "1.0.0",
-  "description": "Chat with NodeJS",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "name": "socket.io",
+  "version": "2.1.1",
+  "description": "node.js realtime framework server",
+  "keywords": [
+    "realtime",
+    "framework",
+    "websocket",
+    "tcp",
+    "events",
+    "socket",
+    "io"
+  ],
+  "main": "./lib/index",
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JR-Pikachu/chatNodeJS.git"
+    "url": "git://github.com/socketio/socket.io"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JR-Pikachu/chatNodeJS/issues"
+  "scripts": {
+    "test": "nyc mocha --reporter spec --slow 200 --bail --timeout 10000 test/socket.io.js"
   },
-  "homepage": "https://github.com/JR-Pikachu/chatNodeJS#readme",
   "dependencies": {
-    "express": "^4.16.3",
-    "socket.io": "^2.1.1",
-    "twig": "^1.11.1"
-  }
+    "debug": "~3.1.0",
+    "engine.io": "~3.2.0",
+    "has-binary2": "~1.0.2",
+    "socket.io-adapter": "~1.1.0",
+    "socket.io-client": "2.1.1",
+    "socket.io-parser": "~3.2.0"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.1",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
+    "superagent": "^3.8.2",
+    "supertest": "^3.0.0"
+  },
+  "contributors": [
+    {
+      "name": "Guillermo Rauch",
+      "email": "rauchg@gmail.com"
+    },
+    {
+      "name": "Arnout Kazemier",
+      "email": "info@3rd-eden.com"
+    },
+    {
+      "name": "Vladimir Dronnikov",
+      "email": "dronnikov@gmail.com"
+    },
+    {
+      "name": "Einar Otto Stangvik",
+      "email": "einaros@gmail.com"
+    }
+  ]
 }
