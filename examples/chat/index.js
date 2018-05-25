@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
     db.on('error', console.error.bind(console, 'Connection error:'));
     db.once('open', function() {
       db.collection("chats").insert(data);
+      db.close();
     });
   });
 
@@ -53,12 +54,14 @@ io.on('connection', (socket) => {
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'Connection error:'));
     db.once('open', function() {
-      chats.find(function(error, result) {
-        for (var i = 0; i < result.length; i++) {
+      chats.find().sort({ $natural: -1 }).limit(10).exec(function(error, result) {
+        for (var i = result.length - 1; i >= 0; i--) {
           socket.emit('new message', {
             username: result[i].username,
             message: result[i].message
-          });        }
+          });
+        }
+        db.close();
       });
     });
 
